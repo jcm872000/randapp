@@ -1,0 +1,62 @@
+<% pageName="update" %>
+<% include header.html %>
+<div>
+	<table>
+	<tr>
+	<th>姓名</th>
+	<th>基础权重</th>
+	<th>请假权重</th>
+	</tr>
+	<% for(var i=0; i<readData.length; i++) {%>
+	<tr><% for(var j=0;j<readData[i].length;j++) {
+		if(j==readData[i].length-1){ %>
+			<td><input type="text" value='<%=readData[i][j].value %>'></td>
+		<% }else{ %>
+			<td><%=readData[i][j].value %></td>
+		<% } %>
+	<% } %>
+	</tr><% } %>
+	</table>
+</div>
+<div><button id="j-save" type="button">保存权重</button><button><a href="/index">返回抽奖</a></button></div>
+<script>
+    $(function() {
+      new init();
+    });
+    function init(){
+    	$('#j-save').bind({
+          click: save
+        });  
+    };
+    var save = function(){
+    	var submitData = new Array();
+      <% for(var i=0;i<readData.length;i++){%>
+        var child = new Array();
+        <% for(var j=0;j<readData[i].length;j++){%>
+           var node = {
+            value: '<%=readData[i][j].value%>',
+            formatCode: 'General'
+           };
+           child.push(node);
+        <%}%>
+        submitData.push(child);  
+      <%}%>
+      var length = submitData[0].length;
+      var k=0;
+      $('input').each(function(i,e){
+        submitData[k++][length-1].value = $(e).attr("value");
+      });
+      // console.log(submitData);
+    	$.ajax({
+              url: '/update/save',
+              type: 'POST',
+              data: {submitData : submitData},
+              success: function(_data){
+                if(_data){
+                    window.location.reload();
+                }
+              }
+          });
+    };
+</script>
+<% include footer.html %>

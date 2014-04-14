@@ -1,0 +1,50 @@
+<% pageName="rand" %>
+<% include header.html %>
+<div>
+	<table>
+	<tr>
+	<th>姓名</th>
+	<th>抽奖得分</th>
+	</tr>
+	<% for(var i=0; i<result.length; i++) {%>
+	<tr>
+    <td><%=result[i].name %></td>
+    <td><%=result[i].value %></td>
+	</tr><% } %>
+	</table>
+</div>
+<div class="win"><%=answer%>中奖了，下次分享哦！<div>
+<div><button id="j-save" type="button">保存返回</button><button><a href="/index">直接返回</a></button></div>
+<script>
+    $(function() {
+      new init();
+    });
+    function init(){
+    	$('#j-save').bind({
+          click: save
+        });  
+    };
+    var save = function(){
+    	var submitData = new Array();
+      	<% for(var i=0;i<readData.length;i++){%>
+        var child = new Array();
+        <% for(var j=0;j<readData[i].length;j++){%>
+           var node = {
+            value: '<%=readData[i][j].value%>',
+            formatCode: 'General'
+           };
+           child.push(node);
+        <%}%>
+        submitData.push(child);  
+      	<%}%>
+    	$.ajax({
+              url: '/rand/save',
+              type: 'POST',
+              data: {submitData : submitData},
+              success: function(_data){
+              	window.open("./index","_self");
+              }
+        });
+    };
+</script>
+<% include footer.html %>

@@ -1,0 +1,18 @@
+<% pageName="index" %>
+<% include header.html %>
+<div>
+	<table>
+	<tr>
+	<th>姓名</th>
+	<th>基础权重</th>
+	<th>请假权重</th>
+	</tr>
+	<% for(var i=0; i<readData.length; i++) {%>
+	<tr><% for(var j=0;j<readData[i].length;j++) {%>
+	<td> <%=readData[i][j].value %></td>
+	<% } %>
+	</tr><% } %>
+	</table>
+</div>
+<div><button><a href="/update">修改权重</a></button><button><a href="/rand">开始抽奖</a></button></div>
+<% include footer.html %>
